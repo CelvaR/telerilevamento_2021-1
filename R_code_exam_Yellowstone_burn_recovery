@@ -193,9 +193,9 @@ grid.arrange(p1, p2, p3, p4, nrow = 2)
 #siamo così in grado di capire qual è la percentuale di territorio che ha subito incendi, quella rivegetata e quella che non ha subito cambiamenti.
 
 #ora classifichiamo le immagini in 3 CLASSI
-1a CLASSE = prateria (bianco)
-2a CLASSE = nuvole/parte incencendiata (giallo)
-3a CLASSE = foresta (verde)
+### 1a CLASSE = prateria (bianco)
+### 2a CLASSE = nuvole/parte incencendiata (giallo)
+### 3a CLASSE = foresta (verde)
 
 #set.seed(42) #questa funzione fa in modo che vengano utilizzate sempre le stesse repliche per il modello e che i colori rimangano gli stessi.
 Ys1c <- unsuperClass(Ys_1987beforefire, nClasses=3)
@@ -218,29 +218,29 @@ plot(Ys2c$map)
 #Quanta parte di foresta è andata persa durante l'incendio del 1988? Andiamo a calcolare la frequenza dei pixel di una certa classe
 #frequencies
 freq(Ys1c$map)
-     value   count
-[1,]     1 4377087
-[2,]     2  681566
-[3,]     3 5660423
+###      value   count
+### [1,]     1 4377087
+### [2,]     2  681566
+### [3,]     3 5660423
 
 
 #calcoliamo la proporzione di pixel e sommiamo i valori
 s1<-4377087+681566+5660423
 s1
-[1] 10719076
+### [1] 10719076
 
 prop1<- freq(Ys1c$map)/s1
-            value     count
-[1,] 9.329162e-08 0.4083456   #prop. 40%    #40.83
-[2,] 1.865832e-07 0.0635844   #prop. 0.06%  #06.35
-[3,] 2.798749e-07 0.5280701   #prop. 52%    #52.80
+###             value     count
+### [1,] 9.329162e-08 0.4083456   #prop. 40%    #40.83
+### [2,] 1.865832e-07 0.0635844   #prop. 0.06%  #06.35
+### [3,] 2.798749e-07 0.5280701   #prop. 52%    #52.80
 
 s2<- 10719076
 prop2<- freq(Ys2c$map)/s2
-            value     count
-[1,] 9.329162e-08 0.4371661   #43.71
-[2,] 1.865832e-07 0.2003741   #20.03
-[3,] 2.798749e-07 0.3624598   #36.24
+###             value     count
+### [1,] 9.329162e-08 0.4371661   #43.71
+### [2,] 1.865832e-07 0.2003741   #20.03
+### [3,] 2.798749e-07 0.3624598   #36.24
 
 #build a dataframe
 cover<- c("prateria", "parte incendiata", "foresta")
@@ -249,10 +249,10 @@ percent_1989<- c(43.71,20.03,36.24)
           
 percentages<- data.frame (cover, percent_1987, percent_1989)
 percentages  
-       cover percent_1987 percent_1989
-1         prateria        40.83        43.71
-2 parte incendiata         6.35        20.03
-3          foresta        52.80        36.24
+###        cover percent_1987 percent_1989
+### 1         prateria        40.83        43.71
+### 2 parte incendiata         6.35        20.03
+### 3          foresta        52.80        36.24
 
 #Usando ggplot2 generiamo un dataframe
 cover1<-ggplot(percentages, aes(x=cover, y=percent_1987, color=cover)) + geom_bar(stat="identity", fill="white")   
@@ -289,10 +289,10 @@ plot(Ys_2018_pca$map) #la prima componente principale è quella che mantiene l'i
 summary(Ys_2018_pca$model)
 #the first PC contains  0.8228578  of the original information (proporzione della varianza che spiega quanta variabilità iniziale è presente nelle singole bande).
 #Importance of components:
-                           Comp.1     Comp.2     Comp.3
-Standard deviation     50.3337498 22.1948987 7.26548308
-Proportion of Variance  0.8228578  0.1599973 0.01714491
-Cumulative Proportion   0.8228578  0.9828551 1.00000000
+###                            Comp.1     Comp.2     Comp.3
+### Standard deviation     50.3337498 22.1948987 7.26548308
+### Proportion of Variance  0.8228578  0.1599973 0.01714491
+### Cumulative Proportion   0.8228578  0.9828551 1.00000000
 
 pc1 <- Ys_2018_pca$map$PC1
 plot(pc1)
@@ -321,32 +321,32 @@ plotRGB(Ys_1987beforefire,1, 2, 3, stretch="Lin")
 click(Ys_1987beforefire, id=T, xy=T, cell=T, type="p", pch=16, col="magenta") # con la funzione "click" si selezionano i punti sull'immagine di cui ricaverà il valore di risposta spettrale per ogni immagine
 
 #x      y    cell Yellowstone_19870805.1 Yellowstone_19870805.2
-1 304.5 2300.5 3185907                    117                    205
-  Yellowstone_19870805.3
-1                    101
-       x      y    cell Yellowstone_19870805.1 Yellowstone_19870805.2
-1 1572.5 1524.5 5727799                    102                    111
-  Yellowstone_19870805.3
-1                     66
-
-       x     y    cell Yellowstone_19870805.1 Yellowstone_19870805.2
-1 1464.5 647.5 8598989                    172                    193
-  Yellowstone_19870805.3
-1                    124
-       x      y    cell Yellowstone_19870805.1 Yellowstone_19870805.2
-1 1291.5 2236.5 3396430                     95                    111
-  Yellowstone_19870805.3
-1                     66
-       x     y    cell Yellowstone_19870805.1 Yellowstone_19870805.2
-1 3020.5 839.5 7971937                     76                    106
-  Yellowstone_19870805.3
-1                     72
+### 1 304.5 2300.5 3185907                    117                    205
+###   Yellowstone_19870805.3
+### 1                    101
+###        x      y    cell Yellowstone_19870805.1 Yellowstone_19870805.2
+### 1 1572.5 1524.5 5727799                    102                    111
+###   Yellowstone_19870805.3
+### 1                     66
+### 
+###        x     y    cell Yellowstone_19870805.1 Yellowstone_19870805.2
+### 1 1464.5 647.5 8598989                    172                    193
+###   Yellowstone_19870805.3
+### 1                    124
+###        x      y    cell Yellowstone_19870805.1 Yellowstone_19870805.2
+### 1 1291.5 2236.5 3396430                     95                    111
+###   Yellowstone_19870805.3
+### 1                     66
+###        x     y    cell Yellowstone_19870805.1 Yellowstone_19870805.2
+### 1 3020.5 839.5 7971937                     76                    106
+###   Yellowstone_19870805.3
+### 1                     72
 
 click(Ys_1987beforefire, id=T, xy=T, cell=T, type="p", pch=16, col="green")
- x      y    cell Yellowstone_19870805.1 Yellowstone_19870805.2
-1 1662.5 1505.5 5790095                     73                    119
-  Yellowstone_19870805.3
-1                     57
+###  x      y    cell Yellowstone_19870805.1 Yellowstone_19870805.2
+### 1 1662.5 1505.5 5790095                     73                    119
+###   Yellowstone_19870805.3
+### 1                     57
 
 
 # inseriamo i valori in un vettore e li salviamo in una variabile:
