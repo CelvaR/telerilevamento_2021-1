@@ -21,6 +21,7 @@ library(rasterVis)
 library(RStoolbox)
 library(ggplot2)
 library(gridExtra)
+library(viridis) ### ho aggiunto questa, che ti serve
 setwd ("C:/lab/yellowstone/") #Windows  #setto la R Working Directory per spiegare ad R da che cartella andare a caricare il nostro dataset di immagini
 
 #1. Times series 1987-2018
@@ -50,52 +51,55 @@ plotRGB(Ys_2008,1, 2, 3, stretch="Lin")
 plotRGB(Ys_2018,1, 2, 3, stretch="Lin")
 
 # colorRampPalette estende la palette dei colori, i numeri che vediamo a lato dell'immagine sono i valori di riflettanza e ad ogni valore è stato associato un colore
-cl <- colorRampPalette(c('dark red','red','orange','yellow'))(100)  #c creazione di un vettore o array(argomento) che racchiude i nuovi colori scelti (elementi)
-plot(Ys_1988fire, col=cl)
+### cl <- colorRampPalette(c('dark red','red','orange','yellow'))(100)  #c creazione di un vettore o array(argomento) che racchiude i nuovi colori scelti (elementi)
+### occhio a "cl", perchè alla riga 100 lo rifai, ma diverso! Io terrei quello lì, visto che qua sotto usi "cts"
+### plot(Ys_1988fire, col=cl)
 
-#Utilizzando la funzione "raster" carico le singole immagini e le plotto
-Ys_1987beforefireR <- raster("Yellowstone_19870805.jpg") 
-cts <- colorRampPalette(c("blue","dark green","light green","orange","white")) (100)
-plot(Ys_1987beforefire, col=cts)
-Ys_1988fireR<-raster("Yellowstone_19880823.jpg")
-plot(Ys_1988fire,col=cts)
-Ys_1989afterfireR<-raster("Yellowstone_19890802.jpg")
-plot(Ys_1989afterfire,col=cts)
-Ys_1993R<-raster("Yellowstone_19930922.jpg")
-plot(Ys_1993,col=cts)
-Ys_1996R<-raster("Yellowstone_19960712.jpg")
-plot(Ys_1996,col=cts)
-Ys_1998R<-raster("Yellowstone_19980718.jpg")
-plot(Ys_1998,col=cts)
-Ys_2008R<-raster("Yellowstone_20080915.jpg")
-plot(Ys_2008,col=cts)
-Ys_2018R<-raster("Yellowstone_20180222.jpg")
-plot(Ys_2018,col=cts)
+### #Utilizzando la funzione "raster" carico le singole immagini e le plotto
+### Ys_1987beforefireR <- raster("Yellowstone_19870805.jpg") 
+### cts <- colorRampPalette(c("blue","dark green","light green","orange","white")) (100)
+### plot(Ys_1987beforefire, col=cts) ### questi li ho eliminati perchè li richiami, più ordinatamente, dopo
+### Ys_1988fireR<-raster("Yellowstone_19880823.jpg")
+### plot(Ys_1988fire,col=cts)
+### Ys_1989afterfireR<-raster("Yellowstone_19890802.jpg")
+### plot(Ys_1989afterfire,col=cts)
+### Ys_1993R<-raster("Yellowstone_19930922.jpg")
+### plot(Ys_1993,col=cts)
+### Ys_1996R<-raster("Yellowstone_19960712.jpg")
+### plot(Ys_1996,col=cts)
+### Ys_1998R<-raster("Yellowstone_19980718.jpg")
+### plot(Ys_1998,col=cts)
+### Ys_2008R<-raster("Yellowstone_20080915.jpg")
+### plot(Ys_2008,col=cts)
+### Ys_2018R<-raster("Yellowstone_20180222.jpg")
+### plot(Ys_2018,col=cts)
 
-par(mfrow=c(2,4))
-plot(Ys_1987beforefireR, col=cts)
-plot(Ys_1988fire,col=cts)
-plot(Ys_1989afterfireR,col=cts)
-plot(Ys_1993R,col=cts)
-plot(Ys_1996R,col=cts)
-plot(Ys_1998R,col=cts)
-plot(Ys_2008R,col=cts)
-plot(Ys_2018R,col=cts)
+### par(mfrow=c(2,4))
+### plot(Ys_1987beforefireR, col=cts)
+### plot(Ys_1988fireR,col=cts)
+### plot(Ys_1989afterfireR,col=cts)
+### plot(Ys_1993R,col=cts)
+### plot(Ys_1996R,col=cts)
+### plot(Ys_1998R,col=cts)
+### plot(Ys_2008R,col=cts)
+### plot(Ys_2018R,col=cts)
 
 #Creiamo una lista con la funzione "list.files" e utilizziamo un "pattern" che accomuna tutti i files, in questo caso "Yellowstone_" Per importare tutte queste immagini insieme usiamo la funzione "lapply" applicabile ad una lista di file o un vettore
-rlist <- list.files(pattern="Yellowstone_")
-rlist
+rlist <- list.files(pattern="ellowstone_")
+### rlist
 
 import <- lapply(rlist,raster) #alla funzione "lapply" viene applicata la funzione "raster"
-import
+### import
 
 timesYs<-stack(import) #la funzione "stack" crea un unico file partendo da una lista o un dataframe a cui associamo un nome
-levelplot(timesYs) 
+### levelplot(timesYs) ### questo lo fai meglio alla riga 103
 
 #Possiamo anche applicare la funzione "levelplot" considerando ogni singolo file interno a "timesYs"
-levelplot(timesYs$Ys_1987beforefireR)
+par(mfrow=c(1,1)) ### che sennò ti aggiunge un plottino solo al lenzuolo 2*4 che hai impostato sopra!
+### levelplot(timesYs$Ys_1987beforefireR) ### questo livello non esiste nel brick 
 
 cl <- colorRampPalette(c("blue","light blue","pink","red"))(100)
+par(mfrow=c(2,4)) ### e qua ti re-imposti il lenzuolo
 levelplot(timesYs,col.regions=cl,main="Yellostone Park's burn recovery",names.attr=c("1987","1988", "1989", "1993","1996","1998","2008","2018"))
 
 #.................................................................................
@@ -129,13 +133,15 @@ Ys_1987beforefire<-brick("Yellowstone_19870805.jpg")
 #min values :                      0,                      0,                      0 
 #max values :                    255,                    255,                    255
 
-Ys_1988fire<-brick("Yellowstone_19880823.jpg")
-Ys_1989afterfire<-brick("Yellowstone_19890802.jpg")
-Ys_2008<-brick("Yellowstone_20080915.jpg")
+### Ys_1988fire<-brick("Yellowstone_19880823.jpg") ### questi li hai già fatti sopra
+### Ys_1989afterfire<-brick("Yellowstone_19890802.jpg")
+### Ys_2008<-brick("Yellowstone_20080915.jpg")
 
 #NBR 1987
 nbr_1987<-(Ys_1987beforefire$Yellowstone_19870805.3 - Ys_1987beforefire$Yellowstone_19870805.1)/(Ys_1987beforefire$Yellowstone_19870805.3 +Ys_1987beforefire$Yellowstone_19870805.1) # si esegue il calcolo per ricavare il valore di NBR
 cl <- colorRampPalette(c('red','orange','green','yellow'))(100)# specifico la palette di colori desiderata
+### chiamala con un altro nome, che "cl" ce l'hai già
+par(mfrow=c(2,2)) ### giusto?
 plot(nbr_1987, col=cl, main="NBR 1987")
 
 #NBR 1988
@@ -150,7 +156,7 @@ plot(nbr_1989, col=cl, main="NBR 1989")
 nbr_2008<-(Ys_2008$Yellowstone_20080915.3  - Ys_2008$Yellowstone_20080915.1)/(Ys_2008$Yellowstone_20080915.3+Ys_2008$Yellowstone_20080915.1) # si esegue il calcolo per ricavare il valore di NBR
 plot(nbr_2008, col=cl, main="NBR 2008")
 
-par(mfrow=c(2,2))
+### par(mfrow=c(2,2))
 plot(nbr_1987, col=cl, main="NBR 1987")
 plot(nbr_1988, col=cl, main="NBR 1988")
 plot(nbr_1989, col=cl, main="NBR 1989") 
@@ -167,15 +173,15 @@ levelplot(nbr_2008,col.regions=cl,main="NBR 2008")
 #3. Land cover
 #per plottare in modo migliore le immagini richiamo la library ggplot2 e gridExtra
 
-Ys_1987beforefire<-brick("Yellowstone_19870805.jpg")
-Ys_1988fire<-brick("Yellowstone_19880823.jpg")
-Ys_1989afterfire<-brick("Yellowstone_19890802.jpg")
-Ys_2018<-brick("yellowstone_20180222.jpg")
+### Ys_1987beforefire<-brick("Yellowstone_19870805.jpg") ### Già fatti all'inizio
+### Ys_1988fire<-brick("Yellowstone_19880823.jpg")
+### Ys_1989afterfire<-brick("Yellowstone_19890802.jpg")
+### Ys_2018<-brick("yellowstone_20180222.jpg")
 
-plotRGB(Ys_1987beforefire,1, 2, 3, stretch="Lin")
-plotRGB(Ys_1988fire,1, 2, 3, stretch="Lin")
-plotRGB(Ys_1989afterfire,1, 2, 3, stretch="Lin")
-plotRGB(Ys_2018,1, 2, 3, stretch="Lin")
+### plotRGB(Ys_1987beforefire,1, 2, 3, stretch="Lin") ### già plottati all'inizio
+### plotRGB(Ys_1988fire,1, 2, 3, stretch="Lin")
+### plotRGB(Ys_1989afterfire,1, 2, 3, stretch="Lin")
+### plotRGB(Ys_2018,1, 2, 3, stretch="Lin")
 
 p1<-ggRGB(Ys_1987beforefire,1, 2, 3, stretch="Lin") #con questa funzione vengono visualizzate anche le coordinate spaziali del nostro oggetto(conta dei pixel sulla x e sulla y, non è un vero S.R.!)
 p2<-ggRGB(Ys_1988fire,1, 2, 3, stretch="Lin")
@@ -193,9 +199,9 @@ grid.arrange(p1, p2, p3, p4, nrow = 2)
 #siamo così in grado di capire qual è la percentuale di territorio che ha subito incendi, quella rivegetata e quella che non ha subito cambiamenti.
 
 #ora classifichiamo le immagini in 3 CLASSI
-1a CLASSE = prateria (bianco)
-2a CLASSE = nuvole/parte incencendiata (giallo)
-3a CLASSE = foresta (verde)
+### 1a CLASSE = prateria (bianco)
+### 2a CLASSE = nuvole/parte incencendiata (giallo)
+### 3a CLASSE = foresta (verde)
 
 #set.seed(42) #questa funzione fa in modo che vengano utilizzate sempre le stesse repliche per il modello e che i colori rimangano gli stessi.
 Ys1c <- unsuperClass(Ys_1987beforefire, nClasses=3)
@@ -210,6 +216,7 @@ Ys1c
 #plot(class1989$map,col=cl)
 #plot(class2018$map,col=cl)??????
 
+par(mfrow=c(2,1)) ### giusto?
 plot(Ys1c$map) #con la classificazione si generano diversi output, plottiamo solo la mappa e la richiamiamo con il simbolo $
 
 Ys2c <- unsuperClass(Ys_1989afterfire, nClasses=3)
@@ -218,29 +225,29 @@ plot(Ys2c$map)
 #Quanta parte di foresta è andata persa durante l'incendio del 1988? Andiamo a calcolare la frequenza dei pixel di una certa classe
 #frequencies
 freq(Ys1c$map)
-     value   count
-[1,]     1 4377087
-[2,]     2  681566
-[3,]     3 5660423
+###      value   count
+### [1,]     1 4377087
+### [2,]     2  681566
+### [3,]     3 5660423
 
 
 #calcoliamo la proporzione di pixel e sommiamo i valori
 s1<-4377087+681566+5660423
 s1
-[1] 10719076
+### [1] 10719076
 
 prop1<- freq(Ys1c$map)/s1
-            value     count
-[1,] 9.329162e-08 0.4083456   #prop. 40%    #40.83
-[2,] 1.865832e-07 0.0635844   #prop. 0.06%  #06.35
-[3,] 2.798749e-07 0.5280701   #prop. 52%    #52.80
+###             value     count
+### [1,] 9.329162e-08 0.4083456   #prop. 40%    #40.83
+### [2,] 1.865832e-07 0.0635844   #prop. 0.06%  #06.35
+### [3,] 2.798749e-07 0.5280701   #prop. 52%    #52.80
 
 s2<- 10719076
 prop2<- freq(Ys2c$map)/s2
-            value     count
-[1,] 9.329162e-08 0.4371661   #43.71
-[2,] 1.865832e-07 0.2003741   #20.03
-[3,] 2.798749e-07 0.3624598   #36.24
+###             value     count
+### [1,] 9.329162e-08 0.4371661   #43.71
+### [2,] 1.865832e-07 0.2003741   #20.03
+### [3,] 2.798749e-07 0.3624598   #36.24
 
 #build a dataframe
 cover<- c("prateria", "parte incendiata", "foresta")
@@ -249,24 +256,25 @@ percent_1989<- c(43.71,20.03,36.24)
           
 percentages<- data.frame (cover, percent_1987, percent_1989)
 percentages  
-       cover percent_1987 percent_1989
-1         prateria        40.83        43.71
-2 parte incendiata         6.35        20.03
-3          foresta        52.80        36.24
+###        cover percent_1987 percent_1989
+### 1         prateria        40.83        43.71
+### 2 parte incendiata         6.35        20.03
+### 3          foresta        52.80        36.24
 
 #Usando ggplot2 generiamo un dataframe
 cover1<-ggplot(percentages, aes(x=cover, y=percent_1987, color=cover)) + geom_bar(stat="identity", fill="white")   
 cover2<-ggplot(percentages, aes(x=cover, y=percent_1989, color=cover)) + geom_bar(stat="identity", fill="white")   + #creiamo il grafico a istogramma con le etichette delle percentuali in alto
-  geom_text(aes(label = Percent01),position=position_dodge(width=0.7), vjust=-0.25, size = 6)
+  geom_text(aes(label = cover),position=position_dodge(width=0.7), vjust=-0.25, size = 6) ### ho corretto label = cover
           
 grid.arrange(cover1, cover2, nrow = 1) # this needs griExtra     
 
 #5. Moving window
-Ys_2018<-brick("yellowstone_20180222.jpg")
-plotRGB(Ys_2018,1, 2, 3, stretch="Lin")
+### Ys_2018<-brick("yellowstone_20180222.jpg") ### ce l'hai già
+### plotRGB(Ys_2018,1, 2, 3, stretch="Lin")
 clndvi <- colorRampPalette(c('darkblue','yellow','red','black'))(100)
 
 ndvi2 <- (Ys_2018$yellowstone_20180222.1-Ys_2018$yellowstone_20180222.2) / (Ys_2018$yellowstone_20180222.1+Ys_2018$yellowstone_20180222.2)
+par(mfrow=c(1,1)) ### giusto?
 plot(ndvi2, col=clndvi, main="NDVI time 2")
 
 
@@ -279,7 +287,7 @@ plot(ndvi2_focal, col=clsd) #il blu dà una copertura omogenea di quelle che son
  
 #mean ndvi with focal
 ndvimean <- focal(ndvi2, w=matrix(1/9, nrow=3, ncol=3), fun=mean)
-clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100) # 
+### clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100) ### ce l'hai già
 plot(ndvimean, col=clsd) #valori molto alti nelle praterie d'alta quota, boschi latifoglie e arbusti. Valori più alti per la roccia nuda.
 
 #PCA #la moving window passa sulla PC1 fino a creare una mappa di dev.standard derivante dalla 1a componente principale. Prendendo un sistema multibande ne calcoliamo una PCA e utilizziamo solo la 1a componente principale
@@ -289,10 +297,10 @@ plot(Ys_2018_pca$map) #la prima componente principale è quella che mantiene l'i
 summary(Ys_2018_pca$model)
 #the first PC contains  0.8228578  of the original information (proporzione della varianza che spiega quanta variabilità iniziale è presente nelle singole bande).
 #Importance of components:
-                           Comp.1     Comp.2     Comp.3
-Standard deviation     50.3337498 22.1948987 7.26548308
-Proportion of Variance  0.8228578  0.1599973 0.01714491
-Cumulative Proportion   0.8228578  0.9828551 1.00000000
+###                            Comp.1     Comp.2     Comp.3
+### Standard deviation     50.3337498 22.1948987 7.26548308
+### Proportion of Variance  0.8228578  0.1599973 0.01714491
+### Cumulative Proportion   0.8228578  0.9828551 1.00000000
 
 pc1 <- Ys_2018_pca$map$PC1
 plot(pc1)
@@ -316,37 +324,38 @@ grid.arrange(p1, p2, p3, nrow = 1)  #questo è il metodo migliore per individuar
 #per ogni immagine sono stati presi due punti: uno su una porzione bruciata e uno su una porzione che è rimasta illesa dal fuoco
 
 
-Ys_1987beforefire<-brick("Yellowstone_19870805.jpg")
+### Ys_1987beforefire<-brick("Yellowstone_19870805.jpg") ### ce l'hai già
 plotRGB(Ys_1987beforefire,1, 2, 3, stretch="Lin")
 click(Ys_1987beforefire, id=T, xy=T, cell=T, type="p", pch=16, col="magenta") # con la funzione "click" si selezionano i punti sull'immagine di cui ricaverà il valore di risposta spettrale per ogni immagine
 
 #x      y    cell Yellowstone_19870805.1 Yellowstone_19870805.2
-1 304.5 2300.5 3185907                    117                    205
-  Yellowstone_19870805.3
-1                    101
-       x      y    cell Yellowstone_19870805.1 Yellowstone_19870805.2
-1 1572.5 1524.5 5727799                    102                    111
-  Yellowstone_19870805.3
-1                     66
-
-       x     y    cell Yellowstone_19870805.1 Yellowstone_19870805.2
-1 1464.5 647.5 8598989                    172                    193
-  Yellowstone_19870805.3
-1                    124
-       x      y    cell Yellowstone_19870805.1 Yellowstone_19870805.2
-1 1291.5 2236.5 3396430                     95                    111
-  Yellowstone_19870805.3
-1                     66
-       x     y    cell Yellowstone_19870805.1 Yellowstone_19870805.2
-1 3020.5 839.5 7971937                     76                    106
-  Yellowstone_19870805.3
-1                     72
+### 1 304.5 2300.5 3185907                    117                    205
+###   Yellowstone_19870805.3
+### 1                    101
+###        x      y    cell Yellowstone_19870805.1 Yellowstone_19870805.2
+### 1 1572.5 1524.5 5727799                    102                    111
+###   Yellowstone_19870805.3
+### 1                     66
+### 
+###        x     y    cell Yellowstone_19870805.1 Yellowstone_19870805.2
+### 1 1464.5 647.5 8598989                    172                    193
+###   Yellowstone_19870805.3
+### 1                    124
+###        x      y    cell Yellowstone_19870805.1 Yellowstone_19870805.2
+### 1 1291.5 2236.5 3396430                     95                    111
+###   Yellowstone_19870805.3
+### 1                     66
+###        x     y    cell Yellowstone_19870805.1 Yellowstone_19870805.2
+### 1 3020.5 839.5 7971937                     76                    106
+###   Yellowstone_19870805.3
+### 1                     72
+### 
 
 click(Ys_1987beforefire, id=T, xy=T, cell=T, type="p", pch=16, col="green")
- x      y    cell Yellowstone_19870805.1 Yellowstone_19870805.2
-1 1662.5 1505.5 5790095                     73                    119
-  Yellowstone_19870805.3
-1                     57
+###  x      y    cell Yellowstone_19870805.1 Yellowstone_19870805.2
+### 1 1662.5 1505.5 5790095                     73                    119
+###   Yellowstone_19870805.3
+### 1                     57
 
 
 # inseriamo i valori in un vettore e li salviamo in una variabile:
@@ -360,6 +369,6 @@ spectrals <- data.frame(band,forest,grassland)
 #plottiamo tutto in un grafico in cui le firme spettrali sono identificate da due linee di diverso colore
 ggplot(spectrals,aes(x=band)) +geom_line(aes(y=forest), color="dark green")+geom_line(aes(y=grassland), color="light green") 
 labs(x="band", y="reflectance")
-
+### questa non plotta nulla, poi ci guardo
 #per fare una valutazione corretta è necessario che i punti, presi nei due anni per la stessa sezione, siano gli stessi
 #......................................
